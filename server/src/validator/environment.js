@@ -1,7 +1,7 @@
 const { applicationLevelLogger } = require("../logger/logger");
 
 
-const validateEnvironmentVariables =  () => {
+const validateEnvironmentVariables = () => {
 
     // Accessing environment variables
     const environment = process.env.NODE_ENV || 'LOCAL';
@@ -9,11 +9,9 @@ const validateEnvironmentVariables =  () => {
 
     const port = process.env[`${environment}_PORT`];
     const mongodbUrl = process.env[`${environment}_MONGODB_URL`];
-    const username = process.env[`${environment}_MONGODB_USERNAME`];
-    const password = process.env[`${environment}_MONGODB_PASSWORD`];
 
     // Validating required environment variables
-    const requiredVariables = [port, mongodbUrl, username, password];
+    const requiredVariables = [port, mongodbUrl];
     const missingVariables = requiredVariables.filter(variable => !variable);
 
     if (missingVariables.length > 0) {

@@ -1,17 +1,49 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
+// Define the schema
 const bookMovieSchema = new Schema({
-    movie: Schema.Types.String,
-    slot: Schema.Types.String,
+    movie: {
+        type: String,
+        required: true,
+    },
+    slot: {
+        type: String,
+        required: true,
+    },
     seats: {
-        A1: Schema.Types.Number,
-        A2: Schema.Types.Number,
-        A3: Schema.Types.Number,
-        A4: Schema.Types.Number,
-        D1: Schema.Types.Number,
-        D2: Schema.Types.Number
+        A1: {
+            type: Number,
+            required: true,
+        },
+        A2: {
+            type: Number,
+            required: true,
+        },
+        A3: {
+            type: Number,
+            required: true,
+        },
+        A4: {
+            type: Number,
+            required: true,
+        },
+        D1: {
+            type: Number,
+            required: true,
+        },
+        D2: {
+            type: Number,
+            required: true,
+        }
     }
+});
 
-})
+// Create and export the model
+const BookMovie = mongoose.model('BookMovie', bookMovieSchema);
 
-exports.bookMovieSchema = bookMovieSchema;
+bookMovieSchema.index({ _id: -1 });
+
+module.exports = {
+    BookMovie
+};
