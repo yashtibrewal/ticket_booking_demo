@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Health Check API
+  description: API documentation for health check endpoints.
+  version: 1.0.0
+servers:
+  - url: ''
+    description: Server
+paths:
+  /health:
+    get:
+      summary: Health Endpoint
+      description: Returns a simple message indicating that the server is up and running.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Status of the server
+                  message:
+                    type: string
+                    description: Health check message
+  /health/database:
+    get:
+      summary: Database Health Check
+      description: Checks if the MongoDB database is reachable.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Status of the server and database
+                  message:
+                    type: string
+   

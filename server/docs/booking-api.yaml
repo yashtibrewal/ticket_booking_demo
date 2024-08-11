@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: Movie Booking API
+  description: API documentation for the Movie Booking application.
+  version: 1.0.0
+servers:
+  - url: ''
+    description: Local server
+paths:
+  /api/booking:
+    post:
+      summary: Book a movie
+      description: Creates a new movie booking.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movie:
+                  type: string
+                  description: The name of the movie
+                slot:
+                  type: string
+                  description: The time slot for the booking
+                seats:
+                  type: object
+                  properties:
+                    A1:
+                      type: number
+                      description: Number of seats in A1
+                    A2:
+                      type: number
+                      description: Number of seats in A2
+                    A3:
+                      type: number
+                      description: Number of seats in A3
+                    A4:
+                      type: number
+                      description: Number of seats in A4
+                    D1:
+                      type: number
+                      description: Number of seats in D1
+                    D2:
+                      type: number
+                      description: Number of seats in D2
+      responses:
+        '201':
+          description: Booking created successfully
+        '400':
+          description: Invalid request
+
+    get:
+      summary: Retrieve the last booking
+      description: Returns the last <booking> or a message if <no booking> is found. Please check the scehmas at the bottom to understand the return type.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Booking'
+                  - $ref: '#/components/schemas/NoBooking'
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Booking:
+      type: object
+      properties:
+        movie:
+          type: string
+          description: The name of the movie
+        slot:
+          type: string
+          description: The time slot for the booking
+        seats:
+          type: object
+          properties:
+            A1:
+              type: number
+              description: Number of seats in A1
+            A2:
+              type: number
+              description: Number of seats in A2
+            A3:
+              type: number
+              description: Number of seats in A3
+            A4:
+              type: number
+              description: Number of seats in A4
+            D1:
+              type: number
+              description: Number of seats in D1
+            D2:
+              type: number
+              description: Number of seats in D2
+        _id:
+          type: string
+          description: Unique identifier for the booking
+        __v:
+          type: number
+          description: Version key
+    NoBooking:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message indicating no previous booking found

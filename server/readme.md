@@ -31,6 +31,7 @@ Other features added:
 2. Logging information and errors.
 3. System health check routes to check if server and db is connected ok.
 4. Seperate local and production environment
+5. Documentation added using swagger at <url>/api-docs endpoint
 
 Note:
 I have used the latest nodemodules and upgraded the project to remove server security vulnerabilities.

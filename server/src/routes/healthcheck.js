@@ -10,7 +10,6 @@ router.get('/health', (req, res) => {
     });
 });
 
-
 router.get('/health/database', async (req, res, next) => {
     try {
         // Check MongoDB connectivity

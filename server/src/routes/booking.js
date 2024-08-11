@@ -3,7 +3,6 @@ const { BookMovie } = require("../schema");
 
 const router = Router();
 
-
 router.post('/api/booking', async (req, res, next) => {
 
     try {

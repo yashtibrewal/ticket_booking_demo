@@ -17,6 +17,7 @@ const { applicationLevelLogger } = require('./logger/logger');
 const { errorHandlingMiddleware } = require('./errorHandlingMiddleware');
 const { healthCheckRouter } = require('./routes/healthcheck');
 const { bookingRoutes } = require('./routes/booking');
+const { swaggerUi, swaggerSpec } = require('./swagger');
 
 const app = express();
 
@@ -30,6 +31,10 @@ app.use(httpLoggingMiddleware);
 
 // Body parser express.json() which is fine for JSON bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Enable documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Define your routes
 
