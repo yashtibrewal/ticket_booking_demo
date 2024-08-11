@@ -1,5 +1,6 @@
 // Require necessary modules
 const mongoose = require('mongoose');
+const { applicationLevelLogger } = require('./logger/logger');
 
 // Extract environment variables
 const { NODE_ENV } = process.env;
@@ -16,8 +17,9 @@ const mongoURI = `mongodb://${username}:${password}@${mongodbUrl}`;
 // Connect to MongoDB using Mongoose
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        console.log("Connection established with the MongoDB server online");
+        const message = `Connection established with the MongoDB server online ${process.env[`${environmentPrefix}MONGODB_URL`]}`;
+        applicationLevelLogger.info(message);
     })
     .catch(err => {
-        console.log("Error while connecting to MongoDB", err);
+        applicationLevelLogger.error(err)
     });

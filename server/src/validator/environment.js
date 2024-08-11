@@ -1,11 +1,11 @@
+const { applicationLevelLogger } = require("../logger/logger");
 
 
 const validateEnvironmentVariables =  () => {
 
     // Accessing environment variables
     const environment = process.env.NODE_ENV || 'LOCAL';
-
-    console.log(`Environment Used : ${environment}`);
+    applicationLevelLogger.info(`Environment Used : ${environment}`);
 
     const port = process.env[`${environment}_PORT`];
     const mongodbUrl = process.env[`${environment}_MONGODB_URL`];
@@ -17,8 +17,7 @@ const validateEnvironmentVariables =  () => {
     const missingVariables = requiredVariables.filter(variable => !variable);
 
     if (missingVariables.length > 0) {
-        console.error(`Some environment variables are missing for ${environment} environment. Please check your .env file.`);
-        process.exit(1);
+        applicationLevelLogger.error(new Error('Invalid .env file'));
     }
 }
 
