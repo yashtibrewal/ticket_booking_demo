@@ -4,20 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha '__tests__/*.test.js' --reporter mochawesome --recursive  --timeout 60000 --exit",
-    "run": "node ./index.js",
-    "start": "node ./index.js"
+    "unit-tests": "mocha '__tests__/*.test.js' --reporter mochawesome --recursive --timeout 60000 --exit",
+    "dev": "cross-env NODE_ENV=LOCAL nodemon ./src/index.js",
+    "test":"cross-env NODE_ENV=TESTING nodemon ./src/index.js",
+    "start": "cross-env NODE_ENV=PRODUCTION node ./src/index.js"
   },
-  "author": "",
+  "author": "Yash Tibrewal",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "express": "4.17.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "mongodb": "^3.6.3",
-    "mongoose": "^5.10.15",
-    "node-serialize": "0.0.4",
-    "body-parser": "1.19.0"
-  },
-  "devDependencies": {
+    "mongoose": "^5.10.15"
   }
 }

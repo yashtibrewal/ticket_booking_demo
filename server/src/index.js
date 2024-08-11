@@ -1,16 +1,34 @@
+// index.js
+
+// Load the configuration from .env file for the process.
+// These should be the first lines in the app to avoid errors.
+const dotenv = require('dotenv');
+dotenv.config();
+
+// Validate environment variables before proceeding
+const { validateEnvironmentVariables } = require('./validator/environment');
+validateEnvironmentVariables();
+
+// Dependencies
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
-const port = 8080;
-const path = require('path')
+const { connection } = require("./connector");
+const cors = require('cors');
+const path = require('path');
+
+const app = express();
+
+// Body parser setup
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-const { connection } = require("./connector");
-const cors = require('cors')
-app.use(cors())
 
+// Enable CORS
+app.use(cors());
 
+// Get the port from environment variables
+const port = process.env[`${process.env.NODE_ENV}_PORT`];
 
-app.listen(port, () => console.log(`App listening on port ${port}!`));
-
-module.exports = app;   
+// Start the server
+app.listen(port, () => {
+  console.log(`App listening on port ${port}!`);
+});
