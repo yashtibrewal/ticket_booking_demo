@@ -1,5 +1,12 @@
-const path = require("path");
+
+// dependencies
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const config = require('dotenv').config();
+
+// console.log(env, environment, backendUrl);
+
 module.exports = {
     entry: './src/index.js',
 
@@ -7,16 +14,6 @@ module.exports = {
         path: path.join(__dirname, "dist"),
         filename: "index_bundle.js",
     },
-    devServer: {
-        proxy: {
-            '/api/**': {
-                target: 'http://localhost:8080/',
-                secure: false,
-                changeOrigin: true
-            }
-        },
-    },
-
     module: {
         rules: [
             {
@@ -42,6 +39,11 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/index.html"
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                API_URL: JSON.stringify(process.env.API_URL)
+            }
         })
     ],
     resolve: {
