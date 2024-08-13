@@ -6,8 +6,8 @@
   "scripts": {
     "test": "cypress run  --headless --reporter mochawesome",
     "dev": "webpack-dev-server --mode development",
-    "predeploy": "npm i && npm run start",
-    "start": "webpack --mode production"
+    "predeploy": "npm i && npm run build",
+    "build": "webpack --mode production"
   },
   "keywords": [],
   "author": "",

@@ -50,7 +50,7 @@ const PastBooking = ({ newBooking, setNewBooking }) => {
         <div className="border-bottom p-2"><b>Movie:</b> {movie}</div>
         <div className="border-bottom p-2"><b>Time Slot:</b> {slot}</div>
         <div className="p-2 d-flex flex-wrap ">
-          <div className="p-1 m-1"><b>Seats:</b></div>
+          <div className="p-1"><b>Seats:</b></div>
           {Object.entries(seats).map(([seat, count]) => (
             count > 0 ? (
               <div className="border p-1 m-1" key={seat}>

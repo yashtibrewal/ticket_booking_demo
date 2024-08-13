@@ -64,8 +64,21 @@ const BookYourShow = ({ getPreviousBooking }) => {
         log.info('Seat Count Changed');
         const value = event.target.value;
         let num = 0;
+
+        if (value == '') {
+            const updatedCounts = [...seatCounts];
+            updatedCounts[index] = 0;
+            setSeatCounts(updatedCounts);
+            return;
+        }
+
+
         try {
             num = parseInt(value, 10);
+            if (num > 20) {
+                setSeatAlertMessage('Max seats 20 per type');
+                return;
+            }
             const updatedCounts = [...seatCounts];
             updatedCounts[index] = num;
             setSeatCounts(updatedCounts);
@@ -74,6 +87,7 @@ const BookYourShow = ({ getPreviousBooking }) => {
             setTotalSelectedSeats(temp);
             localStorage.setItem('totalSelectedSeats', temp);
         } catch (err) {
+
             log.error(err.message);
         }
     }
@@ -211,27 +225,27 @@ const BookYourShow = ({ getPreviousBooking }) => {
             </div>
             <div className="border-top p-2 mt-2">
                 <h6>Select the seats (Total Selected : {totalSelectedSeats})</h6>
-                <div hidden={seatAlertMesasge == ''} className="alert alert-danger">{seatAlertMesasge}</div>
+                <div hidden={seatAlertMesasge == ''} className="alert alert-danger ">
+                    <div hidden={seatAlertMesasge == ''} className="d-flex align-items-center justify-content-between">
+                        <span hidden={seatAlertMesasge == ''}>{seatAlertMesasge}</span>
+                        <button hidden={seatAlertMesasge == ''} type="button" className="btn btn-close" onClick={() => { setSeatAlertMessage('') }}>X</button>
+                    </div>
+                </div>
                 <div className="d-flex just-content-center flex-wrap">
                     {seats.map((seat, index) => (
                         <div
                             key={index}
-                            className="pointer col-sm-12 col-md-6"
+                            className="pointer d-flex flex-wrap m-2"
                         >
-                            <div className="border p-1 mt-2 ">
-                                <div className="d-flex justify-space-around">
-
-                                    <div className="ml-5">{`Seat Type ${seat}`}</div>
-                                    <div className="ml-5">{`Count ${seatCounts[index]}`}</div>
-                                </div>
+                            <div className="border p-2 m-1 d-flex-column align-items-center flex-wrap">
+                                <div className="">{`Seat Type ${seat}`}</div>
                                 <input
-                                    type="range"
+                                    type="number"
                                     value={seatCounts[index]}
                                     onChange={(event) => handleSeatCount(index, event)}
                                     className="form-range mt-1 col"
-                                    min="0"
-                                    max="20"
-                                    step="1"
+                                    min={0}
+                                    max={20}
                                 />
                             </div>
                         </div>
