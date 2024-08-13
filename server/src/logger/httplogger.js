@@ -2,9 +2,16 @@
 
 const { applicationLevelLogger } = require("./logger");
 
+const excludedRoutes = ['/health', '/health/database'];
+
 const httpLoggingMiddleware = (req, res, next) => {
+    // Skip logging for excluded routes
+    if (excludedRoutes.includes(req.originalUrl)) {
+        return next();
+    }
+
     const start = Date.now();
-    
+
     res.on('finish', () => {
         const duration = Date.now() - start;
 
@@ -35,4 +42,4 @@ const httpLoggingMiddleware = (req, res, next) => {
     next();
 }
 
-module.exports = {httpLoggingMiddleware};
+module.exports = { httpLoggingMiddleware };

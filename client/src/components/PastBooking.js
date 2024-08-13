@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../styles/App.css';
 import '../styles/bootstrap.min.css';
 import { getPastBooking } from "../services/bookings";
+import log from 'loglevel';
 
 const PastBooking = ({ newBooking, setNewBooking }) => {
   const [movie, setMovie] = useState('');
@@ -30,7 +31,9 @@ const PastBooking = ({ newBooking, setNewBooking }) => {
           throw error;
         }
       } catch (err) {
-        console.log(err);
+
+        log.error(err.message);
+
       } finally {
         setNewBooking(false);
       }
@@ -46,15 +49,15 @@ const PastBooking = ({ newBooking, setNewBooking }) => {
       <div hidden={alertMessage != ''}>
         <div className="border-bottom p-2"><b>Movie:</b> {movie}</div>
         <div className="border-bottom p-2"><b>Time Slot:</b> {slot}</div>
-        <div className="p-2">
-          <h6><b>Seats:</b></h6>
-          <ul>
-            {Object.entries(seats).map(([seat, count]) => (
-              <li key={seat}>
-                {seat}: {count}
-              </li>
-            ))}
-          </ul>
+        <div className="p-2 d-flex flex-wrap ">
+          <div className="p-1 m-1"><b>Seats:</b></div>
+          {Object.entries(seats).map(([seat, count]) => (
+            count > 0 ? (
+              <div className="border p-1 m-1" key={seat}>
+                {seat}({count})
+              </div>
+            ) : null
+          ))}
         </div>
       </div>
     </div>

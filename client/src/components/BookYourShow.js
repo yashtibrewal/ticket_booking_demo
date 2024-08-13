@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../styles/App.css';
 import '../styles/bootstrap.min.css';
 import { movies, seats, slots } from "./data";
 import { bookMovie } from '../services/bookings';
+import log from 'loglevel';
 
-const BookYourShow = ({onBooking}) => {
+const BookYourShow = ({ getPreviousBooking }) => {
 
     const buttonSpamProtectionTimer = 3000; // 3000 ms
+
+    useEffect(() => {
+        log.info('Updated from localStorage if any');
+        if (localStorage.getItem('movie') != null) {
+            setSelectedMovie(localStorage.getItem('movie'));
+        }
+        if (localStorage.getItem('slot') != null) {
+            setSelectedSlot(localStorage.getItem('slot'));
+        }
+        if (localStorage.getItem('seatCounts') != null) {
+            setSeatCounts(JSON.parse(localStorage.getItem('seatCounts')));
+        }
+        if (localStorage.getItem('totalSelectedSeats') != null) {
+            setTotalSelectedSeats(localStorage.getItem('totalSelectedSeats'));
+        }
+    }, []);
 
     const [selectableMovies, setSelectableMovie] = useState(movies);
     const [selectedMovie, setSelectedMovie] = useState(null);
@@ -14,6 +31,8 @@ const BookYourShow = ({onBooking}) => {
 
     const handleMovieClick = (movie) => {
         setSelectedMovie(movie);
+        log.info('Movie Selected');
+        localStorage.setItem('movie', movie);
     };
 
     const [selectableSlots, setSeletableSlots] = useState(slots);
@@ -22,6 +41,8 @@ const BookYourShow = ({onBooking}) => {
 
     const handleSlotClick = (slot) => {
         setSelectedSlot(slot);
+        log.info('Slot Selected');
+        localStorage.setItem('slot', slot);
     };
 
     const noSelectedSeats = () => {
@@ -40,6 +61,7 @@ const BookYourShow = ({onBooking}) => {
      */
     const handleSeatCount = (index, event) => {
 
+        log.info('Seat Count Changed');
         const value = event.target.value;
         let num = 0;
         try {
@@ -47,15 +69,20 @@ const BookYourShow = ({onBooking}) => {
             const updatedCounts = [...seatCounts];
             updatedCounts[index] = num;
             setSeatCounts(updatedCounts);
-            setTotalSelectedSeats(updatedCounts.reduce((value, prev) => prev + value, 0));
+            localStorage.setItem('seatCounts', JSON.stringify(updatedCounts));
+            const temp = updatedCounts.reduce((value, prev) => prev + value, 0);
+            setTotalSelectedSeats(temp);
+            localStorage.setItem('totalSelectedSeats', temp);
         } catch (err) {
-            console.log(err);
+            log.error(err.message);
         }
     }
 
     const [apiCallAlertMessage, setApiCallAlertMessage] = useState('');
     const [apiCallInfoAlertMessage, setApiCallInfoAlertMessage] = useState('');
     const [apiCallErrorAlertMessage, setApiCallErrorAlertMessage] = useState('');
+
+    // This variable helps setting the button to disabled based on api calling.
     const [apiCalled, setApiCalled] = useState(false);
 
     /**
@@ -82,17 +109,29 @@ const BookYourShow = ({onBooking}) => {
             });
 
             if (serviceResponseMessage.isSuccess) {
-                console.log('success');
-                onBooking();
+                getPreviousBooking();
                 setApiCallInfoAlertMessage('');
                 setApiCallAlertMessage('Booking Successful!');
+
+                // Reseting all the content
+                localStorage.clear();
+                setSelectedMovie(null);
+                setSelectedSlot(null);
+                setSeatCounts(noSelectedSeats());
+                setTotalSelectedSeats(0);
+                setMovieAlertMessage("");
+                setSlotAlertMessage("");
+                setSeatAlertMessage("");
+                setApiCallErrorAlertMessage("");
+
             } else {
-                throw serviceResponseMessage.error;
+                log.error(serviceResponseMessage.error);
+                throw new Error('Something went Wrong!');
             }
 
 
         } catch (err) {
-            console.log(err);
+            log.error(err.message);
             setApiCallInfoAlertMessage('');
             setApiCallErrorAlertMessage(err.message);
         } finally {
@@ -105,13 +144,6 @@ const BookYourShow = ({onBooking}) => {
 
 
 
-        setSelectedMovie(null);
-        setSelectedSlot(null);
-        setSeatCounts(noSelectedSeats());
-        setTotalSelectedSeats(0);
-        setMovieAlertMessage("");
-        setSlotAlertMessage("");
-        setSeatAlertMessage("");
     }
 
     /**
@@ -130,7 +162,13 @@ const BookYourShow = ({onBooking}) => {
     return (
         <div className="bg-light p-3">
             <div className="p-3"> <h5>Book Your Show!! </h5></div>
-            <div hidden={apiCallErrorAlertMessage == ''} className="alert alert-danger">{apiCallErrorAlertMessage}</div>
+            <div hidden={apiCallErrorAlertMessage == ''} className="alert alert-danger ">
+                <div className="d-flex align-items-center justify-content-between">
+                    <span hidden={apiCallErrorAlertMessage == ''}>{apiCallErrorAlertMessage}</span>
+                    <button hidden={apiCallErrorAlertMessage == ''} type="button" className="btn btn-close" onClick={() => { setApiCallErrorAlertMessage('') }}>X</button>
+                </div>
+            </div>
+
             <div hidden={apiCallAlertMessage == ''} className="alert alert-success">
                 <div className="d-flex align-items-center justify-content-between ">
                     <span hidden={apiCallAlertMessage == ''}>{apiCallAlertMessage}</span>
@@ -148,7 +186,7 @@ const BookYourShow = ({onBooking}) => {
                         <span
                             key={index}
                             onClick={() => handleMovieClick(movie)}
-                            className={`pointer border p-2 m-2 ${selectedMovie === movie ? 'bg-primary text-white' : ''}`}
+                            className={`pointer border p-2 m-2 ${selectedMovie === movie ? 'bg-primary text-white' : 'bg-white'}`}
                         >
                             {movie}
                         </span>
@@ -164,7 +202,7 @@ const BookYourShow = ({onBooking}) => {
                         <div
                             key={index}
                             onClick={() => handleSlotClick(slot)}
-                            className={`pointer border p-2 m-2 ${selectedSlot === slot ? 'bg-primary text-white' : ''}`}
+                            className={`pointer border p-2 m-2 ${selectedSlot === slot ? 'bg-primary text-white' : 'bg-white'}`}
                         >
                             {slot}
                         </div>

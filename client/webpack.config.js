@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const config = require('dotenv').config();
 
-// console.log(env, environment, backendUrl);
 
 module.exports = {
     entry: './src/index.js',
