@@ -87,24 +87,24 @@ Next is to run the test command
 
 ### Endpoints are as follows:
 
-#### POST /api/booking
+#### POST `/api/booking`
 
 This post API is used for creating a booking based on the userd data.
 
-#### GET /api/booking
+#### GET `/api/booking`
 
 Returns the latest booking or returns empty message.
 
 
-#### GET /api-docs
+#### GET `/api-docs`
 
 Swagger documentation for the API endpoints.
 
-#### GET /health
+#### GET `/health`
 
 Ping test to check if server is running.
 
-#### GET /health/database
+#### GET `/health/database`
 
 Ping test to check if server and database is running.
 
