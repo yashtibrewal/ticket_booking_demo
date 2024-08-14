@@ -5,15 +5,28 @@
 
 ### Local Setup Guide
 
-The mongodb server should be running locally
+> Note: The mongodb server should be running locally
 
+#### Method 1: Using web-pack-server
+For the frontend server 
 
-For the frontend server
+1. `cd` into the `/client` repository
+2. `npm install`
+3. `npm run dev`
 
-1. cd into the `/client` repository
-2. npm install
-3. npm run dev
+Done. The local server is now running, and the link would be in cmd.
 
+#### Method 2: Using nginx
+
+To run it explicity at particular port.
+
+1. Install ngnix.
+2. Compule the server files using `npm run build`
+3. Update the nginx.conf file. Refer sampel file in the repository.
+4. Run nginx.
+5. The frontend static files will be served at http://localhost:3000
+
+Done.
 
 ## User Stories Covered
 
@@ -50,11 +63,27 @@ Reason for not implementing -> What if the movie has not been booked, what about
 
 ## Backend
 
+> *Reminder*: The mongodb server should be running locally
+
 For the backend server
 
-1. cd into the `/server` repository
-2. npm install
-3. npm run dev
+1. `cd` into the `/server` repository
+2. `npm install`
+3. `npm run dev`
+
+Done. The server is now servering at the http://localhost:8080/api-docs
+
+### Testing
+
+#### Local Testing
+
+1. `cd` into the `/server` repository
+2. `npm install`
+3. `npm run test_server`
+
+Next is to run the test command
+
+1. `npm run test` form a different cmd.
 
 ### Endpoints are as follows:
 
@@ -96,6 +125,7 @@ Ping test to check if server and database is running.
 1. Backend Deployed: https://ticket-booking-demo.onrender.com/api-docs/#/ 
 2. Frontend Deployed: https://ticket-booking-demo-1.onrender.com/
 
+> *Warning*: Since I have used render.com server, it takes upto 60 seconds for the server to be live once the request has been sent initially. Free service on render.com turns down the server on inactivity.
 
 
 
